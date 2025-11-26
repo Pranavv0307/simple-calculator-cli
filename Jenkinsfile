@@ -44,7 +44,7 @@ pipeline {
                     DOCKERHUB_REPO = "pranav0307/calculator-image"
                 }
                 withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-creds',
+                    credentialsId: 'dockerhub-credentials',
                     usernameVariable: 'USER', 
                     passwordVariable: 'PASS'
                 )]) {
