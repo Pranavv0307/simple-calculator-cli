@@ -37,6 +37,23 @@ pipeline {
                 sh "docker images"
             }
         }
+        stage('Docker Push') {
+            steps {
+                script {
+                    IMAGE_NAME = "calculator-image"
+                    DOCKERHUB_REPO = "pranav0307/calculator-image"
+                }
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'USER', 
+                    passwordVariable: 'PASS'
+                )]) {
+                    sh "echo $PASS | docker login -u $USER --password-stdin"
+                    sh "docker tag ${IMAGE_NAME} ${DOCKERHUB_REPO}:latest"
+                    sh "docker push ${DOCKERHUB_REPO}:latest"
+                }
+            }
+        }
     }
 
     post {
@@ -48,22 +65,6 @@ pipeline {
         }
     }
 
-    stage('Docker Push') {
-    steps {
-        script {
-            IMAGE_NAME = "calculator-image"
-            DOCKERHUB_REPO = "pranav0307/calculator-image"
-        }
-        withCredentials([usernamePassword(
-            credentialsId: 'dockerhub-creds',
-            usernameVariable: 'USER', 
-            passwordVariable: 'PASS'
-        )]) {
-            sh "echo $PASS | docker login -u $USER --password-stdin"
-            sh "docker tag ${IMAGE_NAME} ${DOCKERHUB_REPO}:latest"
-            sh "docker push ${DOCKERHUB_REPO}:latest"
-        }
-    }
-}
+    
 
 }
