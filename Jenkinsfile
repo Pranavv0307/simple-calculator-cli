@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         GIT_BRANCH = "main"
+        PATH = "/var/lib/jenkins/.local/bin:${env.PATH}"
     }
 
     stages {
@@ -16,7 +17,7 @@ pipeline {
 
         stage('Install Requirements') {
             steps {
-                sh 'python3 -m pip install --upgrade pip'
+                sh 'python3 -m pip install --upgrade pip setuptools wheel'
                 sh 'pip install -r requirements.txt'
             }
         }
